@@ -40,6 +40,7 @@ defmodule CodeCorps.GitHub.User do
   @spec do_connect(User.t, map, String.t) :: {:ok, User.t} | {:error, Changeset.t}
   defp do_connect(%User{} = user, %{} = user_payload, access_token)
     when is_binary(access_token) do
+
     Accounts.update_from_github_oauth(user, user_payload, access_token)
   end
 

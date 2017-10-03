@@ -14,8 +14,9 @@ defmodule CodeCorps.Accounts.Changesets do
     struct
     |> Changeset.change(params |> Adapters.User.from_github_user())
     |> Changeset.put_change(:sign_up_context, "github")
-    |> Changeset.unique_constraint(:email)
     |> Changeset.validate_inclusion(:type, ["bot", "user"])
+    |> Changeset.unique_constraint(:email)
+    |> Changeset.unique_constraint(:github_id)
   end
 
   @doc ~S"""
@@ -26,8 +27,9 @@ defmodule CodeCorps.Accounts.Changesets do
     struct
     |> Changeset.cast(params, [:github_auth_token, :github_avatar_url, :github_id, :github_username, :type])
     |> ensure_email_without_overwriting(params)
-    |> Changeset.unique_constraint(:email)
     |> Changeset.validate_required([:github_auth_token, :github_avatar_url, :github_id, :github_username, :type])
+    |> Changeset.unique_constraint(:email)
+    |> Changeset.unique_constraint(:github_id)
   end
 
   @spec ensure_email_without_overwriting(Changeset.t, map) :: Changeset.t
